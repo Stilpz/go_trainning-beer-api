@@ -1,0 +1,194 @@
+########################################
+# 📦 Node.js build artifacts
+########################################
+# Dependencias locales
+node_modules/
+# Archivos de distribución
+dist/
+
+########################################
+# ☕ Java & Maven build artifacts
+########################################
+# Archivos compilados de Java
+*.class
+# Archivos JAR
+*.jar
+# Archivos WAR
+*.war
+# Carpeta generada por Maven
+target/
+
+########################################
+# 🐍 Python bytecode
+########################################
+# Bytecode de Python
+*.pyc
+*.pyo
+*.pyd
+
+########################################
+# 📜 Archivos de logs y reports
+########################################
+# Archivos de log
+*.log
+# Reportes de pruebas unitarias
+TEST*.xml
+# Logs de errores
+crash.log
+# Logs múltiples
+crash.*.log
+
+########################################
+# 📁 Configuración de entornos y secretos
+########################################
+# Variables de entorno
+.env
+# Archivo específico de entorno
+cmd/env_dev.env
+# Archivos de configuración de entorno genéricos
+*.env
+
+########################################
+# 🖥️ Archivos del sistema operativo
+########################################
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+# Linux (papelera)
+.Trash-*
+# Preferencias de carpetas KDE
+.directory
+# FUSE (archivos eliminados en uso)
+.fuse_hidden*
+# Archivos temporales NFS
+.nfs*
+
+########################################
+# ⚙️ IDEs y herramientas de desarrollo
+########################################
+# JetBrains IDEs (IntelliJ, GoLand, etc.)
+.idea/
+# VS Code configuración
+.vscode/
+# Ignora all
+.vscode/*
+# Excepto configuración compartida
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+# Historial local de archivos (VS Code)
+.history/
+# Workspace de Sublime Text
+*.sublime-workspace
+# Cache de sintaxis
+*.tmlanguage.cache
+# Cache de preferencias
+*.tmPreferences.cache
+# Cache de temas
+*.stTheme.cache
+# Configuración SFTP en Sublime
+sftp-config.json
+Package Control.last-run
+Package Control.ca-list
+Package Control.ca-bundle
+Package Control.system-ca-bundle
+Package Control.cache/
+Package Control.ca-certs/
+Package Control.merged-ca-bundle
+Package Control.user-ca-bundle
+oscrypto-ca-bundle.crt
+bh_unicode_properties.cache
+GitHub.sublime-settings
+
+########################################
+# 🧪 Archivos de pruebas y cobertura en Go
+########################################
+# Archivos de cobertura
+*.out
+# Archivo de cobertura de Go
+*coverage.out
+# Carpeta de cobertura personalizada
+.coverage/
+# Binarios de pruebas Go (`go test -c`)
+*.test
+
+########################################
+# 🐹 Go dependency managers
+########################################
+# Dependencias locales (modificables)
+vendor/
+# Godep dependency folder (deprecated)
+Godeps/
+
+########################################
+# 🗃️ Binaries y ejecutables
+########################################
+# Ejecutables de Windows
+*.exe
+# Librerías de Windows
+*.dll
+# Librerías compartidas en Linux
+*.so
+# Librerías compartidas en macOS
+*.dylib
+# Aplicaciones macOS
+*.app
+# Archivo binario local
+bootstrap
+
+########################################
+# 🧾 Archivos comprimidos o multimedia
+########################################
+# Archivos comprimidos
+*.zip
+*.rar
+# Archivos de video
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+########################################
+# 🧱 Infraestructura como código (Terraform)
+########################################
+# Archivos generados por Terraform
+**/.terraform/*
+# Archivos de estado
+*.tfstate
+# Versiones del estado
+*.tfstate.*
+# Variables sensibles
+*.tfvars
+*.tfvars.json
+# Overrides locales
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Lock del estado
+.terraform.tfstate.lock.info
+# Configuración de CLI
+.terraformrc
+terraform.rc
+
+########################################
+# 🐘 Datos de persistencia locales
+########################################
+postgres-data/*
+postgres-data
+
+########################################
+# 🗑️ Archivos temporales de Linux
+########################################
+# Archivos temporales de edición
+*~
+
+########################################
+# 📄 Archivos específicos de proyecto
+########################################
+# Archivo de estructura específico del proyecto
+Estructura_TABLAS
