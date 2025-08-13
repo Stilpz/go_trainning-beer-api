@@ -1,30 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-
-	"github.com/joho/godotenv"
+	// router agrupa la configuración de rutas y middlewares sobre Echo.
+	"go_trainning/beer-api/configs/generals/router"
+	// server proporciona la instancia de Echo con middlewares globales (CORS).
+	"go_trainning/beer-api/configs/generals/server"
 )
 
+// main ejecuta el flujo de arranque de la aplicación:
+//   1. Crear la instancia de Echo configurada con CORS.
+//   2. Registrar rutas y middlewares usando el módulo router.
+//   3. Iniciar el servidor en el puerto 8888 y, en caso de error, terminar la ejecución.
 func main() {
-	// Cargar variables de entorno desde .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error cargando el archivo .env: %v", err)
-	}
+	// Inicializa el servidor con configuración básica (CORS).
+	serverEcho := server.NewServer()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8888" // valor por defecto
-	}
+	// Registra rutas y middlewares adicionales (RequestID, Logger, Recover, endpoints).
+	router.Init(serverEcho)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Beer API escuchando en el puerto "+port)
-	})
-
-	log.Printf("Servidor escuchando en el puerto %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	// Arranca el servidor en el puerto 8888; registra fatal si ocurre un error.
+	serverEcho.Logger.Fatal(serverEcho.Start(":8888"))
 }
