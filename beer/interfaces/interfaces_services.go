@@ -6,8 +6,8 @@ import (
 )
 
 type BeerService interface {
-	GetAllBeers(ctx context.Context) ([]model.Beers, error)
-	GetBeerById(ctx context.Context, id uint) (model.Beers, error)
-	CreateBeerWithId(ctx context.Context, beers *model.Beers) error
-	GetOneBoxPrice(ctx context.Context, id uint, currency string, quantity int) (float64, error)
+    GetAllBeers(ctx context.Context) ([]model.Beers, error)
+    GetBeerById(ctx context.Context, id uint) (model.Beers, error)
+    CreateBeerWithId(ctx context.Context, beers *model.Beers) error
+    GetOneBoxPrice(ctx context.Context, id uint, currencyPay string, quantity int) (model.PriceResponse, error)
 }
