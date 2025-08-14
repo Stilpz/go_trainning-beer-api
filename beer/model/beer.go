@@ -50,3 +50,52 @@ func (b *Beers) ToBeersResponse() BeersResponse {
 		Currency: b.Currency,
 	}
 }
+
+// BeerRequest define la estructura esperada en las peticiones HTTP
+// para crear o actualizar una cerveza. Omite campos vacíos en el JSON.
+type BeerRequest struct {
+	ID	uint `json:"id,omitempty"`	//Identificador único de la cerveza (opciones en creación)
+	Name string `json:"name,omitempty"`	//Nombre de la cerveza
+	Brewery string `json:"brewery,omitempty"`	//Cervecería productora
+	Country string `json:"country,omitempty"`	//País de origen
+	Price float64 `json:"price,omitempty"`	//Precio unitario
+	Currency string `json:"currency,omitempty"`	//Código ISO de la moneda (ej: USD)
+}
+
+// Validate ejecuta validaciones de campo sobre la estructura BeersRequest.
+// Retorna un mapa de errores donde la clave es el identificador de validación
+// y el valor es el mensaje descriptivo.
+// Errores posibles:
+//   - "id_required": debe proporcionarse un ID válido (no cero).
+//   - "name_required": el nombre no puede estar vacío.
+//   - "brewery_required": la cervecería no puede estar vacía.
+//   - "country_required": el país no puede estar vacío.
+//   - "price_required": el precio debe ser distinto de cero.
+//   - "currency_required": la moneda debe ser un código ISO válido de al menos 3 caracteres.
+func (br *BeerRequest) Validate() map[string]string {
+	errorMessages := make(map[string]string)
+
+	if br.ID == 0 {
+		errorMessages["id_required"] = "Id is required or id invalid"
+	}
+	if br.Name == "" {
+		errorMessages["name_required"] = "Name is required"
+	}
+	if br.Brewery == "" {
+		errorMessages["brewery_required"] = "Brewery is required"
+	}
+	if br.Country == "" {
+		errorMessages["country_required"] = "Country is required"
+	}
+	if br.Price <= 0 {
+		errorMessages["price_required"] = "Price must be greater than zero"
+	}
+	if br.Price == 0 {
+		errorMessages["price_required"] = "price is required and must be greater than zero"
+	}
+	if len(br.Currency) < 3 {
+		errorMessages["currency_required"] = "Ccurrency is required and it has to be a valid currency code"
+	}
+
+	return errorMessages
+}
