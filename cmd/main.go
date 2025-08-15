@@ -29,9 +29,20 @@ import (
 	"github.com/labstack/echo/v4"
 	// Logger zerolog
 	"github.com/rs/zerolog/log"
+
+	// Documentación autogenerada de Swagger
+	_ "go_trainning/beer-api/docs"
 )
 
 // main es la función principal que inicializa y arranca la aplicación.
+// main
+// @title Swagger Data the Beer Api
+// @version 1.0
+// @tag beer-api
+// @description Es el repositorio de entrenamiento de Dropi
+// @termsOfService http://swagger.io/terms/
+// @host dropi.co
+// @BasePath /
 func main() {
 	// 1. Cargar configuración de entorno desde archivo .env
 	if err := godotenv.Load(); err != nil {

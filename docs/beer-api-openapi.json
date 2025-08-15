@@ -1,0 +1,253 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Es el repositorio de entrenamiento de Dropi",
+        "title": "Swagger Data the Beer Api",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "dropi.co",
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "post": {
+                "description": "Recibe un JSON con datos de cerveza",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Beer"
+                ],
+                "operationId": "CreateHandler",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "beer-body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/go_trainning_beer-api_beer_model.BeersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{beerID}": {
+            "get": {
+                "description": "Obtiene una cerveza por su ID",
+                "tags": [
+                    "Beer"
+                ],
+                "operationId": "GetOneHandler",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Beer ID",
+                        "name": "beerID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go_trainning_beer-api_beer_model.BeersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{beerID}/box-price": {
+            "get": {
+                "description": "Calcula y devuelve el precio total de una caja de cervezas",
+                "tags": [
+                    "Currency"
+                ],
+                "operationId": "GetOneBoxPriceHandler",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Beer ID",
+                        "name": "beerID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Currency Pay",
+                        "name": "currency",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Quantity",
+                        "name": "quantity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go_trainning_beer-api_beer_model.PriceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/beer_handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "beer_handler.errorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "go_trainning_beer-api_beer_model.BeersRequest": {
+            "type": "object",
+            "properties": {
+                "brewery": {
+                    "description": "Cervecería productora",
+                    "type": "string"
+                },
+                "country": {
+                    "description": "País de origen",
+                    "type": "string"
+                },
+                "currency": {
+                    "description": "Código ISO de la moneda (ej. \"USD\")",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Identificador único de la cerveza (opcional en creación)",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Nombre de la cerveza",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "Precio unitario",
+                    "type": "number"
+                }
+            }
+        },
+        "go_trainning_beer-api_beer_model.BeersResponse": {
+            "type": "object",
+            "properties": {
+                "brewery": {
+                    "description": "Cervecería productora",
+                    "type": "string"
+                },
+                "country": {
+                    "description": "País de origen",
+                    "type": "string"
+                },
+                "currency": {
+                    "description": "Código de moneda",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Identificador único de la cerveza",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Nombre de la cerveza",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "Precio unitario",
+                    "type": "number"
+                }
+            }
+        },
+        "go_trainning_beer-api_beer_model.PriceResponse": {
+            "type": "object",
+            "properties": {
+                "currency_pay": {
+                    "type": "string"
+                },
+                "price_total": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

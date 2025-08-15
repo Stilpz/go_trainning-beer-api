@@ -1,0 +1,171 @@
+basePath: /
+definitions:
+  beer_handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  go_trainning_beer-api_beer_model.BeersRequest:
+    properties:
+      brewery:
+        description: Cervecería productora
+        type: string
+      country:
+        description: País de origen
+        type: string
+      currency:
+        description: Código ISO de la moneda (ej. "USD")
+        type: string
+      id:
+        description: Identificador único de la cerveza (opcional en creación)
+        type: integer
+      name:
+        description: Nombre de la cerveza
+        type: string
+      price:
+        description: Precio unitario
+        type: number
+    type: object
+  go_trainning_beer-api_beer_model.BeersResponse:
+    properties:
+      brewery:
+        description: Cervecería productora
+        type: string
+      country:
+        description: País de origen
+        type: string
+      currency:
+        description: Código de moneda
+        type: string
+      id:
+        description: Identificador único de la cerveza
+        type: integer
+      name:
+        description: Nombre de la cerveza
+        type: string
+      price:
+        description: Precio unitario
+        type: number
+    type: object
+  go_trainning_beer-api_beer_model.PriceResponse:
+    properties:
+      currency_pay:
+        type: string
+      price_total:
+        type: number
+    type: object
+host: dropi.co
+info:
+  contact: {}
+  description: Es el repositorio de entrenamiento de Dropi
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Data the Beer Api
+  version: "1.0"
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: Recibe un JSON con datos de cerveza
+      operationId: CreateHandler
+      parameters:
+      - description: request body
+        in: body
+        name: beer-body
+        required: true
+        schema:
+          $ref: '#/definitions/go_trainning_beer-api_beer_model.BeersRequest'
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+      tags:
+      - Beer
+  /{beerID}:
+    get:
+      description: Obtiene una cerveza por su ID
+      operationId: GetOneHandler
+      parameters:
+      - description: Beer ID
+        in: path
+        name: beerID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_trainning_beer-api_beer_model.BeersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+      tags:
+      - Beer
+  /{beerID}/box-price:
+    get:
+      description: Calcula y devuelve el precio total de una caja de cervezas
+      operationId: GetOneBoxPriceHandler
+      parameters:
+      - description: Beer ID
+        in: path
+        name: beerID
+        required: true
+        type: string
+      - description: Currency Pay
+        in: query
+        name: currency
+        required: true
+        type: string
+      - description: Quantity
+        in: query
+        name: quantity
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_trainning_beer-api_beer_model.PriceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/beer_handler.errorResponse'
+      tags:
+      - Currency
+swagger: "2.0"

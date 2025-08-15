@@ -7,6 +7,7 @@ import (
 
 	// Echo es el framework web utilizado para definir rutas y handlers.
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 
 	// zerolog para registro estructurado de las rutas cargadas.
 	"github.com/rs/zerolog/log"
@@ -59,6 +60,7 @@ func (r *Router) Init() {
 
 	// Health check
 	apiGroup.GET("/health", healthCheckHandler)
+	apiGroup.GET("/docs/*", echoSwagger.WrapHandler)
 
 	// Endpoints de Beer
 	apiGroup.GET("/", r.beerHandler.GetAllBeersHandler)

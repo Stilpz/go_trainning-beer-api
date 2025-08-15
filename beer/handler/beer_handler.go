@@ -53,6 +53,15 @@ func (bh *beerHandler) GetAllBeersHandler(c echo.Context) error {
 }
 
 // GetOneHandler obtiene una cerveza por su ID, validando el parámetro y devolviendo JSON.
+// @Description Obtiene una cerveza por su ID
+// @Tags Beer
+// @ID GetOneHandler
+// @Param beerID path string true "Beer ID"
+// @Success 200 {object} model.BeersResponse
+// @Failure 400 {object} errorResponse
+// @Failure 404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /{beerID} [GET]
 func (bh *beerHandler) GetOneHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -80,6 +89,17 @@ func (bh *beerHandler) GetOneHandler(c echo.Context) error {
 }
 
 // CreateHandler recibe un JSON con datos de cerveza, lo valida y crea la entidad.
+// @Description Recibe un JSON con datos de cerveza
+// @Tags Beer
+// @Accept application/json
+// @ID CreateHandler
+// @Param beer-body body model.BeersRequest true "request body"
+// @Success 201 {string} Beer created
+// @Failure 400 {object} errorResponse
+// @Failure 409 {object} errorResponse
+// @Failure 422 {object} map[string]string
+// @Failure 500 {object} errorResponse
+// @Router / [POST]
 func (bh *beerHandler) CreateHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	var req model.BeersRequest
@@ -113,6 +133,17 @@ func (bh *beerHandler) CreateHandler(c echo.Context) error {
 // GetOneBoxPriceHandler calcula y devuelve el precio total de una caja de cervezas.
 // - Parámetros path: beerID
 // - Query params: currencyPay (código ISO), quantity (opcional, default 6)
+// @Description Calcula y devuelve el precio total de una caja de cervezas
+// @Tags Currency
+// @ID GetOneBoxPriceHandler
+// @Param beerID path string true "Beer ID"
+// @Param currency query string true "Currency Pay"
+// @Param quantity query int true "Quantity"
+// @Success 200 {object} model.PriceResponse
+// @Failure 400 {object} errorResponse
+// @Failure 404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /{beerID}/box-price [GET]
 func (bh *beerHandler) GetOneBoxPriceHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	// Valores por defecto
