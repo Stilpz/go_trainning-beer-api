@@ -91,21 +91,21 @@ func (b *beerService) GetBeerById(ctx context.Context, ID uint) (model.Beers, er
     return beer, nil
 }
 
-// CreateBeerWithId crea una nueva cerveza con el ID especificado.
+// CreateBeerWithId crea una nueva cerveza basada en los datos de BeersRequest.
 // Antes de persistir, asigna las marcas de tiempo CreatedAt y UpdatedAt.
 // Parámetros:
 //   - ctx: contexto para control de tiempo de espera y cancelación.
-//   - beers: entidad a insertar.
+//   - beersReq: datos de la cerveza a crear, provenientes de la petición HTTP.
 //
 // Retorna:
-//   - error: en caso de fallo de validación o inserción.
-func (b *beerService) CreateBeerWithId(ctx context.Context, beers *model.Beers) error {
+//   - error: en caso de fallo en la creación.
+func (b *beerService) CreateBeerWithId(ctx context.Context, beersReq *model.BeersRequest) error {
 	subLogger := log.With().Str("Method", "BeerService.CreateBeerWithId").Logger()
 	subLogger.Info().Msg("INIT")
-	subLogger.Info().Msgf("argument[s] beer_id=%v", beers.ID)
-	
+	subLogger.Info().Msgf("argument[s] beer_id=%v", beersReq.ID)
+
 	// Validar existencia previa
-	existing, err := b.beerRepository.GetBeerById(ctx, beers.ID)
+	existing, err := b.beerRepository.GetBeerById(ctx, beersReq.ID)
 	if err != nil && !errors.Is(err, repository.ErrBeerNotFound) {
 		subLogger.Error().Msgf("error fetching beer: %v", err)
 		return err
@@ -115,16 +115,28 @@ func (b *beerService) CreateBeerWithId(ctx context.Context, beers *model.Beers) 
 		return ErrBeerAlreadyExists
 	}
 	
+	// Generar timestamps actuales
 	now := time.Now()
-	beers.CreatedAt = now
-	beers.UpdatedAt = now
 
-	if err := b.beerRepository.CreateBeerWithId(ctx, beers); err != nil {
+	// Mapear BeersRequest a entidad persistible model.Beers
+	beerEntity := model.Beers{
+		ID:        beersReq.ID,
+		Name:      beersReq.Name,
+		Brewery:   beersReq.Brewery,
+		Country:   beersReq.Country,
+		Price:     beersReq.Price,
+		Currency:  beersReq.Currency,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	// Delegar creación al repositorio
+	if err := b.beerRepository.CreateBeerWithId(ctx, &beerEntity); err != nil {
 		subLogger.Error().Msgf("error CreateBeerWithId: %v", err)
 		return err
 	}
-	
-	subLogger.Info().Msgf("FIN_OK | beer_id=%v", beers.ID)
+
+	subLogger.Info().Msgf("FIN_OK | beer_id=%v", beersReq.ID)
 	return nil
 }
 
