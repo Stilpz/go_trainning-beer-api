@@ -92,13 +92,6 @@ func (b *beerService) GetBeerById(ctx context.Context, ID uint) (model.Beers, er
 }
 
 // CreateBeerWithId crea una nueva cerveza basada en los datos de BeersRequest.
-// Antes de persistir, asigna las marcas de tiempo CreatedAt y UpdatedAt.
-// Parámetros:
-//   - ctx: contexto para control de tiempo de espera y cancelación.
-//   - beersReq: datos de la cerveza a crear, provenientes de la petición HTTP.
-//
-// Retorna:
-//   - error: en caso de fallo en la creación.
 func (b *beerService) CreateBeerWithId(ctx context.Context, beersReq *model.BeersRequest) error {
 	subLogger := log.With().Str("Method", "BeerService.CreateBeerWithId").Logger()
 	subLogger.Info().Msg("INIT")
