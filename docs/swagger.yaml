@@ -54,7 +54,7 @@ definitions:
       price_total:
         type: number
     type: object
-host: dropi.co
+host: localhost:8888
 info:
   contact: {}
   description: Es el repositorio de entrenamiento de Dropi

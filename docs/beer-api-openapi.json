@@ -7,7 +7,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "dropi.co",
+    "host": "localhost:8888",
     "basePath": "/",
     "paths": {
         "/": {

@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS "beers"(
     price numeric(15, 6) NOT NULL,
     currency character varying(3) NOT NULL,
     created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
     PRIMARY KEY (id)
 );
 

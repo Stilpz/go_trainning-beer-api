@@ -41,7 +41,7 @@ import (
 // @tag beer-api
 // @description Es el repositorio de entrenamiento de Dropi
 // @termsOfService http://swagger.io/terms/
-// @host dropi.co
+// @host localhost:8888
 // @BasePath /
 func main() {
 	// 1. Cargar configuración de entorno desde archivo .env

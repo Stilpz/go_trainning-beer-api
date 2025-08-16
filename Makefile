@@ -25,3 +25,6 @@ mockery-install:
 
 install-lint-windows-chocolatey:
 	choco install golangci-lint
+
+mockery:
+	mockery --config .mockery.yml
