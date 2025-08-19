@@ -1,0 +1,13 @@
+formatter: goimports
+force-file-write: true
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+template: testify
+packages:
+  go_trainning/beer-api:
+    config:
+      all: true
+      recursive: true
+      pkgname: _mocks
+      dir: ./beer/mocks/{{.SrcPackageName}}
+      filename: "mock_{{.InterfaceName}}.go"
