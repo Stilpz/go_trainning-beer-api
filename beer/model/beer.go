@@ -43,21 +43,13 @@ type PriceResponse struct {
 // ToBeersResponse transforma el modelo interno Beers a su representación para la respuesta HTTP.
 // Devuelve un objeto BeersResponse con los campos públicamente expuestos.
 func (b *Beers) ToBeersResponse() BeersResponse {
-	// return BeersResponse{
-	// 	ID:       b.ID,
-	// 	Name:     b.Name,
-	// 	Brewery:  b.Brewery,
-	// 	Country:  b.Country,
-	// 	Price:    b.Price,
-	// 	Currency: b.Currency,
-	// }
-	    return BeersResponse{
-        ID: b.ID,
-        Name: b.Name,
-        Brewery: b.Brewery,
-        Country: b.Country,
-        Price: b.Price,
-        Currency: b.Currency,
+    return BeersResponse{
+        ID:        b.ID,
+        Name:      b.Name,
+        Brewery:   b.Brewery,
+        Country:   b.Country,
+        Price:     b.Price,
+        Currency:  b.Currency,
         CreatedAt: b.CreatedAt,
         UpdatedAt: b.UpdatedAt,
     }

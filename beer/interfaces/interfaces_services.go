@@ -7,7 +7,6 @@ import (
 )
 
 type BeerService interface {
-    // GetAllBeers(ctx context.Context) ([]model.Beers, error)
     GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) // ahora retorna DTO listo
     GetBeerById(ctx context.Context, id uint) (model.BeersResponse, error)
     // CreateBeerWithId crea una nueva cerveza basada en los datos de BeersRequest

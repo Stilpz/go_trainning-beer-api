@@ -43,47 +43,21 @@ func NewBeerService(
 	}
 }
 
-// GetAllBeers retorna todas las cervezas disponibles en formato BeersResponse.
-// Actualmente no implementado y provoca un panic.
-// Parámetros:
-//   - ctx: contexto para control de tiempo de espera y cancelación.
-//
-// Retorna:
-//   - []model.BeersResponse: lista de cervezas.
-//   - error: en caso de fallo.
-// func (b *beerService) GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) {
-// 	panic("GetAllBeers: método no implementado")
-// }
-
-// func (b *beerService) GetAllBeers(ctx context.Context) ([]model.Beers, error) {
-//     subLogger := log.With().Str("Method", "BeerService.GetAllBeers").Logger()
-//     subLogger.Info().Msg("INIT")
-
-//     beers, err := b.beerRepository.GetAllBeers(ctx)
-//     if err != nil {
-//         subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
-//         return nil, err
-//     }
-
-//     subLogger.Info().Msg("END_OK")
-//     return beers, nil
-// }
-
- func (b *beerService) GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) {
+func (b *beerService) GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) {
 	subLogger := log.With().Str("Method", "BeerService.GetAllBeers").Logger()
 	subLogger.Info().Msg("INIT")
 	beers, err := b.beerRepository.GetAllBeers(ctx)
 	if err != nil {
-	    subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
-	    return nil, err
+		subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
+		return nil, err
 	}
 	resp := make([]model.BeersResponse, 0, len(beers))
 	for _, v := range beers {
-	    resp = append(resp, v.ToBeersResponse())
+		resp = append(resp, v.ToBeersResponse())
 	}
 	subLogger.Info().Msg("END_OK")
 	return resp, nil
- }
+}
 
 // GetBeerById obtiene una cerveza por su ID y devuelve su respuesta formateada.
 // Parámetros:
