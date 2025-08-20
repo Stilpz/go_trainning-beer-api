@@ -60,7 +60,8 @@ func (bh *beerHandler) GetAllBeersHandler(c echo.Context) error {
 		log.Error().Msgf("error GetAllBeers: %v", err)
 		return c.JSON(http.StatusInternalServerError, errorResponse{Message: err.Error()})
 	}
-	return c.JSON(http.StatusOK, beers)
+	// return c.JSON(http.StatusOK, beers)
+	return c.JSON(http.StatusOK, map[string]interface{}{"beers": beers})
 }
 
 // GetOneHandler obtiene una cerveza por su ID, validando el parámetro y devolviendo JSON.

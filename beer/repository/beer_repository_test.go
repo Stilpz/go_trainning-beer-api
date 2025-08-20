@@ -126,7 +126,43 @@ func Test_beerRepository_GetBeerById(t *testing.T) {
 // Test_beerRepository_GetAllBeers valida la funcionalidad de obtener todas las cervezas.
 // TODO: implementar casos de prueba para GetAllBeers.
 func Test_beerRepository_GetAllBeers(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
+	repo := NewBeerRepository(db)
+	ctx := context.Background()
+	beersTest := dataBeers()
+
+	t.Run("Success SQL", func(tt *testing.T) {
+		rows := sqlmock.NewRows([]string{"id", "name", "brewery", "country", "price", "currency", "created_at", "updated_at"})
+		for _, beer := range beersTest {
+			rows.AddRow(beer.ID, beer.Name, beer.Brewery, beer.Country, beer.Price, beer.Currency, beer.CreatedAt, beer.UpdatedAt)
+		}
+		mock.ExpectQuery(regexp.QuoteMeta(selectAllBeers)).WillReturnRows(rows)
+
+		gotBeers, errRepo := repo.GetAllBeers(ctx)
+		assert.NoError(t, errRepo)
+		assert.Equal(t, beersTest, gotBeers)
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
+
+	t.Run("Error SQL", func(tt *testing.T) {
+		mock.ExpectQuery(regexp.QuoteMeta(selectAllBeers)).WillReturnError(assert.AnError)
+		gotBeers, errRepo := repo.GetAllBeers(ctx)
+		assert.Error(t, errRepo)
+		assert.Empty(t, gotBeers)
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
+
+	t.Run("No Results", func(tt *testing.T) {
+		rows := sqlmock.NewRows([]string{"id", "name", "brewery", "country", "price", "currency", "created_at", "updated_at"})
+		mock.ExpectQuery(regexp.QuoteMeta(selectAllBeers)).WillReturnRows(rows)
+		gotBeers, errRepo := repo.GetAllBeers(ctx)
+		assert.NoError(t, errRepo)
+		assert.Empty(t, gotBeers)
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
 }
 
 // Test_beerRepository_CreateBeerWithId verifica los flujos de inserción:

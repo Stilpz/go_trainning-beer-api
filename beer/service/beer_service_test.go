@@ -64,9 +64,40 @@ func dataPriceResponse() model.PriceResponse {
 // Test_beerService_GetAllBeers placeholder para pruebas de GetAllBeers.
 // TODO: implementar casos de prueba.
 func Test_beerService_GetAllBeers(t *testing.T) {
+    ctx := context.Background()
 
+    t.Run("success", func(t *testing.T) {
+        beers := dataBeers()
+        beersResponse := make([]model.BeersResponse, 0, len(beers))
+        for _, b := range beers {
+            beersResponse = append(beersResponse, b.ToBeersResponse())
+        }
+
+        mockRepository := _mockInterfaces.NewMockBeerRepository(t)
+        mockExternal := _mockInterfaces.NewMockCurrencyLayer(t)
+        service := NewBeerService(mockRepository, mockExternal)
+
+        mockRepository.On("GetAllBeers", ctx).Return(beers, nil)
+
+        gotBeers, errService := service.GetAllBeers(ctx)
+        assert.NoError(t, errService)
+        assert.Equal(t, beersResponse, gotBeers)
+        mockRepository.AssertExpectations(t)
+    })
+
+    t.Run("error repository", func(t *testing.T) {
+        mockRepository := _mockInterfaces.NewMockBeerRepository(t)
+        mockExternal := _mockInterfaces.NewMockCurrencyLayer(t)
+        service := NewBeerService(mockRepository, mockExternal)
+
+        mockRepository.On("GetAllBeers", ctx).Return(nil, assert.AnError)
+
+        gotBeers, errService := service.GetAllBeers(ctx)
+        assert.Error(t, errService)
+        assert.Nil(t, gotBeers)
+        mockRepository.AssertExpectations(t)
+    })
 }
-
 // Test_beerService_GetBeerById verifica los flujos de GetBeerById:
 // - Éxito devolviendo BeersResponse
 // - Error del repositorio

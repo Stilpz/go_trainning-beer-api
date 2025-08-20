@@ -580,3 +580,79 @@ func Test_beerHandler_CreateHandler(t *testing.T) {
 	})
 
 }
+
+// Test_beerHandler_GetAllBeersHandler prueba el endpoint para obtener todas las cervezas.
+func Test_beerHandler_GetAllBeersHandler(t *testing.T) {
+	mockService := _mocksService.NewMockBeerService(t)
+	handler := NewBeerHandler(mockService)
+	ctx := context.Background()
+
+	t.Run("Successful Response", func(t *testing.T) {
+		beers := []model.BeersResponse{
+			{
+				ID:        fakeBeerIdUint,
+				Name:      "Gulden Draak",
+				Brewery:   "Blót",
+				Country:   "BE",
+				Price:     6.50,
+				Currency:  "EUR",
+				CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+				UpdatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+			},
+		}
+		httpContext := SetupHTTPContext(
+			http.MethodGet,
+			"/beers",
+			nil,
+			nil,
+			nil,
+			"",
+		)
+		mockService.On("GetAllBeers", ctx).Return(beers, nil).Once()
+
+		res := httpContext.Res
+		err := handler.GetAllBeersHandler(httpContext.EchoContext)
+
+		expectedResponse := `{
+			"beers": [
+				{
+					"id": 1,
+					"name": "Gulden Draak",
+					"brewery": "Blót",
+					"country": "BE",
+					"price": 6.50,
+					"currency": "EUR",
+					"created_at": "2023-01-01T00:00:00Z",
+					"updated_at": "2023-01-01T00:00:00Z"
+				}
+			]
+		}`
+
+		assert.NoError(t, err)
+		assert.Equal(t, http.StatusOK, res.Code)
+		assert.JSONEq(t, expectedResponse, res.Body.String())
+		mockService.AssertExpectations(t)
+	})
+
+	t.Run("Internal Server Error", func(t *testing.T) {
+		httpContext := SetupHTTPContext(
+			http.MethodGet,
+			"/beers",
+			nil,
+			nil,
+			nil,
+			"",
+		)
+		mockService.On("GetAllBeers", ctx).Return(nil, assert.AnError).Once()
+
+		res := httpContext.Res
+		err := handler.GetAllBeersHandler(httpContext.EchoContext)
+
+		expectedResponse := `{"message": "assert.AnError general error for testing"}`
+
+		assert.NoError(t, err)
+		assert.Equal(t, http.StatusInternalServerError, res.Code)
+		assert.JSONEq(t, expectedResponse, res.Body.String())
+		mockService.AssertExpectations(t)
+	})
+}

@@ -28,3 +28,26 @@ install-lint-windows-chocolatey:
 
 mockery:
 	mockery --config .mockery.yml
+
+# Define aquí todos los patrones de ruta que quieres probar
+
+PKG_PATHS := ./beer/...
+
+# 1) Listamos todos los paquetes de esas fuentes
+
+# 2) Filtramos los que NO contienen “/mocks/”
+
+# 3) Ejecutamos las pruebas con cobertura
+
+# 4) Mostramos el informe
+
+go-test:
+	@ALL_PKGS=$$(go list $(PKG_PATHS)) && \
+	PKGS=$$(echo "$$ALL_PKGS" | tr ' ' '\n' | grep -v '/mocks/') && \
+	go test -coverprofile=coverage.out -v $$PKGS && \
+	go tool cover -func=coverage.out
+	
+# Genera un informe de cobertura de tests en formato HTML.
+
+go-test-report:
+	go tool cover -html=coverage.out
