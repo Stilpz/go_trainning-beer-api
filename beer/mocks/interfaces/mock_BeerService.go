@@ -96,23 +96,23 @@ func (_c *MockBeerService_CreateBeerWithId_Call) RunAndReturn(run func(ctx conte
 }
 
 // GetAllBeers provides a mock function for the type MockBeerService
-func (_mock *MockBeerService) GetAllBeers(ctx context.Context) ([]model.Beers, error) {
+func (_mock *MockBeerService) GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAllBeers")
 	}
 
-	var r0 []model.Beers
+	var r0 []model.BeersResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]model.Beers, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]model.BeersResponse, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) []model.Beers); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) []model.BeersResponse); ok {
 		r0 = returnFunc(ctx)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]model.Beers)
+			r0 = ret.Get(0).([]model.BeersResponse)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
@@ -147,33 +147,33 @@ func (_c *MockBeerService_GetAllBeers_Call) Run(run func(ctx context.Context)) *
 	return _c
 }
 
-func (_c *MockBeerService_GetAllBeers_Call) Return(beerss []model.Beers, err error) *MockBeerService_GetAllBeers_Call {
-	_c.Call.Return(beerss, err)
+func (_c *MockBeerService_GetAllBeers_Call) Return(beersResponses []model.BeersResponse, err error) *MockBeerService_GetAllBeers_Call {
+	_c.Call.Return(beersResponses, err)
 	return _c
 }
 
-func (_c *MockBeerService_GetAllBeers_Call) RunAndReturn(run func(ctx context.Context) ([]model.Beers, error)) *MockBeerService_GetAllBeers_Call {
+func (_c *MockBeerService_GetAllBeers_Call) RunAndReturn(run func(ctx context.Context) ([]model.BeersResponse, error)) *MockBeerService_GetAllBeers_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetBeerById provides a mock function for the type MockBeerService
-func (_mock *MockBeerService) GetBeerById(ctx context.Context, id uint) (model.Beers, error) {
+func (_mock *MockBeerService) GetBeerById(ctx context.Context, id uint) (model.BeersResponse, error) {
 	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetBeerById")
 	}
 
-	var r0 model.Beers
+	var r0 model.BeersResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uint) (model.Beers, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uint) (model.BeersResponse, error)); ok {
 		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uint) model.Beers); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uint) model.BeersResponse); ok {
 		r0 = returnFunc(ctx, id)
 	} else {
-		r0 = ret.Get(0).(model.Beers)
+		r0 = ret.Get(0).(model.BeersResponse)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, uint) error); ok {
 		r1 = returnFunc(ctx, id)
@@ -213,12 +213,12 @@ func (_c *MockBeerService_GetBeerById_Call) Run(run func(ctx context.Context, id
 	return _c
 }
 
-func (_c *MockBeerService_GetBeerById_Call) Return(beers model.Beers, err error) *MockBeerService_GetBeerById_Call {
-	_c.Call.Return(beers, err)
+func (_c *MockBeerService_GetBeerById_Call) Return(beersResponse model.BeersResponse, err error) *MockBeerService_GetBeerById_Call {
+	_c.Call.Return(beersResponse, err)
 	return _c
 }
 
-func (_c *MockBeerService_GetBeerById_Call) RunAndReturn(run func(ctx context.Context, id uint) (model.Beers, error)) *MockBeerService_GetBeerById_Call {
+func (_c *MockBeerService_GetBeerById_Call) RunAndReturn(run func(ctx context.Context, id uint) (model.BeersResponse, error)) *MockBeerService_GetBeerById_Call {
 	_c.Call.Return(run)
 	return _c
 }

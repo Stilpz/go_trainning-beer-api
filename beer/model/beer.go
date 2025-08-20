@@ -27,6 +27,8 @@ type BeersResponse struct {
 	Country  string  `json:"country,omitempty"`  // País de origen
 	Price    float64 `json:"price,omitempty"`    // Precio unitario
 	Currency string  `json:"currency,omitempty"` // Código de moneda
+	CreatedAt time.Time `json:"created_at,omitempty"` // Fecha de creación
+	UpdatedAt time.Time `json:"updated_at,omitempty"` // Fecha de actualización
 }
 
 // PriceResponse representa la respuesta con el precio total de la caja de cervezas.
@@ -41,14 +43,24 @@ type PriceResponse struct {
 // ToBeersResponse transforma el modelo interno Beers a su representación para la respuesta HTTP.
 // Devuelve un objeto BeersResponse con los campos públicamente expuestos.
 func (b *Beers) ToBeersResponse() BeersResponse {
-	return BeersResponse{
-		ID:       b.ID,
-		Name:     b.Name,
-		Brewery:  b.Brewery,
-		Country:  b.Country,
-		Price:    b.Price,
-		Currency: b.Currency,
-	}
+	// return BeersResponse{
+	// 	ID:       b.ID,
+	// 	Name:     b.Name,
+	// 	Brewery:  b.Brewery,
+	// 	Country:  b.Country,
+	// 	Price:    b.Price,
+	// 	Currency: b.Currency,
+	// }
+	    return BeersResponse{
+        ID: b.ID,
+        Name: b.Name,
+        Brewery: b.Brewery,
+        Country: b.Country,
+        Price: b.Price,
+        Currency: b.Currency,
+        CreatedAt: b.CreatedAt,
+        UpdatedAt: b.UpdatedAt,
+    }
 }
 
 // BeersRequest define la estructura esperada en las peticiones HTTP

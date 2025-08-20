@@ -98,7 +98,7 @@ func (pb *beerRepository) GetAllBeers(ctx context.Context) ([]model.Beers, error
 		beers = append(beers, beerRow)
 	}
 
-	subLogger.Info().Msgf("FIN_OK")
+	subLogger.Info().Msgf("END_OK")
 	return beers, nil
 }
 
@@ -140,7 +140,7 @@ func (pb *beerRepository) GetBeerById(ctx context.Context, ID uint) (model.Beers
 		return model.Beers{}, errScan
 	}
 
-	subLogger.Info().Msgf("FIN_OK | beer_id=%v", ID)
+	subLogger.Info().Msgf("END_OK | beer_id=%v", ID)
 	return beerScan, nil
 }
 
@@ -189,6 +189,6 @@ func (pb *beerRepository) CreateBeerWithId(ctx context.Context, beers *model.Bee
 		return errScan
 	}
 
-	subLogger.Info().Msg("FIN_OK")
+	subLogger.Info().Msg("END_OK")
 	return nil
 }

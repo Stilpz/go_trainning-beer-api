@@ -47,9 +47,20 @@ func Greeting(c echo.Context) error {
 
 // GetAllBeersHandler responde con la lista de todas las cervezas.
 // Actualmente devuelve un placeholder.
+// func (bh *beerHandler) GetAllBeersHandler(c echo.Context) error {
+// 	// TODO: implementar llamada a bh.beerService.GetAllBeers
+// 	return c.JSON(http.StatusOK, "all beers")
+// }
+
 func (bh *beerHandler) GetAllBeersHandler(c echo.Context) error {
 	// TODO: implementar llamada a bh.beerService.GetAllBeers
-	return c.JSON(http.StatusOK, "all beers")
+	ctx := c.Request().Context()
+	beers, err := bh.beerService.GetAllBeers(ctx)
+	if err != nil {
+		log.Error().Msgf("error GetAllBeers: %v", err)
+		return c.JSON(http.StatusInternalServerError, errorResponse{Message: err.Error()})
+	}
+	return c.JSON(http.StatusOK, beers)
 }
 
 // GetOneHandler obtiene una cerveza por su ID, validando el parámetro y devolviendo JSON.

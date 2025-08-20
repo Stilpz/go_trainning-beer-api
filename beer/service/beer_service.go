@@ -55,19 +55,35 @@ func NewBeerService(
 // 	panic("GetAllBeers: método no implementado")
 // }
 
-func (b *beerService) GetAllBeers(ctx context.Context) ([]model.Beers, error) {
-    subLogger := log.With().Str("Method", "BeerService.GetAllBeers").Logger()
-    subLogger.Info().Msg("INIT")
+// func (b *beerService) GetAllBeers(ctx context.Context) ([]model.Beers, error) {
+//     subLogger := log.With().Str("Method", "BeerService.GetAllBeers").Logger()
+//     subLogger.Info().Msg("INIT")
 
-    beers, err := b.beerRepository.GetAllBeers(ctx)
-    if err != nil {
-        subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
-        return nil, err
-    }
+//     beers, err := b.beerRepository.GetAllBeers(ctx)
+//     if err != nil {
+//         subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
+//         return nil, err
+//     }
 
-    subLogger.Info().Msg("FIN_OK")
-    return beers, nil
-}
+//     subLogger.Info().Msg("END_OK")
+//     return beers, nil
+// }
+
+ func (b *beerService) GetAllBeers(ctx context.Context) ([]model.BeersResponse, error) {
+	subLogger := log.With().Str("Method", "BeerService.GetAllBeers").Logger()
+	subLogger.Info().Msg("INIT")
+	beers, err := b.beerRepository.GetAllBeers(ctx)
+	if err != nil {
+	    subLogger.Error().Msgf("error GetAllBeers repo: %v", err)
+	    return nil, err
+	}
+	resp := make([]model.BeersResponse, 0, len(beers))
+	for _, v := range beers {
+	    resp = append(resp, v.ToBeersResponse())
+	}
+	subLogger.Info().Msg("END_OK")
+	return resp, nil
+ }
 
 // GetBeerById obtiene una cerveza por su ID y devuelve su respuesta formateada.
 // Parámetros:
@@ -77,18 +93,18 @@ func (b *beerService) GetAllBeers(ctx context.Context) ([]model.Beers, error) {
 // Retorna:
 //   - model.BeersResponse: datos de la cerveza formateados para la respuesta.
 //   - error: si no existe o falla la consulta.
-func (b *beerService) GetBeerById(ctx context.Context, ID uint) (model.Beers, error) {
+func (b *beerService) GetBeerById(ctx context.Context, ID uint) (model.BeersResponse, error) {
     subLogger := log.With().Str("Method", "BeerService.GetBeerById").Logger()
     subLogger.Info().Msg("INIT")
     subLogger.Info().Msgf("argument[s] beer_id=%v", ID)
 
     beer, err := b.beerRepository.GetBeerById(ctx, ID)
     if err != nil {
-        return model.Beers{}, err
+        return model.BeersResponse{}, err
     }
 
-    subLogger.Info().Msgf("FIN_OK | beer_id=%v", ID)
-    return beer, nil
+    subLogger.Info().Msgf("END_OK | beer_id=%v", ID)
+    return beer.ToBeersResponse(), nil
 }
 
 // CreateBeerWithId crea una nueva cerveza basada en los datos de BeersRequest.
@@ -129,7 +145,7 @@ func (b *beerService) CreateBeerWithId(ctx context.Context, beersReq *model.Beer
 		return err
 	}
 
-	subLogger.Info().Msgf("FIN_OK | beer_id=%v", beersReq.ID)
+	subLogger.Info().Msgf("END_OK | beer_id=%v", beersReq.ID)
 	return nil
 }
 
@@ -173,6 +189,6 @@ func (b *beerService) GetOneBoxPrice(
 	total := exchange.Result * valueTotal
 	rounded := math.Round(total*100) / 100
 
-	subLogger.Info().Msgf("FIN_OK | beer_id=%v, currency_pay=%v, quantity=%v", ID, currencyPay, quantity)
+	subLogger.Info().Msgf("END_OK | beer_id=%v, currency_pay=%v, quantity=%v", ID, currencyPay, quantity)
 	return model.PriceResponse{PriceTotal: rounded, CurrencyPay: currencyPay}, nil
 }
