@@ -46,19 +46,21 @@ func dataBeersResponse() []model.BeersResponse {
 
 // dataCurrencyResponse prepara un externalModel.CurrencyConversionResponse simulado.
 func dataCurrencyResponse() externalModel.CurrencyConversionResponse {
-	return externalModel.CurrencyConversionResponse{
-		Success: true,
-		Terms:   "https://currencylayer.com/terms",
-		Privacy: "https://currencylayer.com/privacy",
-		Query:   "USD to EUR 6.5", // Replace with appropriate string value as expected by the struct
-		Info:    `{"timestamp": 1234567890, "quote": "1.15553"}`,
-		Result:  7.510945,
-	}
+       return externalModel.CurrencyConversionResponse{
+	       Success: true,
+	       Query: externalModel.CurrencyQuery{
+		       From:   "USD",
+		       To:     "EUR",
+		       Amount: 39, // 6.5 * 6
+	       },
+	       Info: externalModel.InfoResponse{Timestamp: 1234567890, Rate: 1.15553},
+	       Result:  45.07, // 39 * 1.15553 redondeado a dos decimales
+       }
 }
 
 // dataPriceResponse retorna el modelo.PriceResponse esperado tras la conversión.
 func dataPriceResponse() model.PriceResponse {
-	return model.PriceResponse{CurrencyPay: fakeCurrencyStr, PriceTotal: 292.93}
+	return model.PriceResponse{CurrencyPay: fakeCurrencyStr, PriceTotal: 45.07}
 }
 
 // Test_beerService_GetAllBeers placeholder para pruebas de GetAllBeers.
@@ -181,7 +183,7 @@ func Test_beerService_GetOneBoxPrice(t *testing.T) {
 		service := NewBeerService(mockRepository, mockExternal)
 
 		mockRepository.On("GetBeerById", ctx, fakeBeerIdUint).Return(beerTest, nil)
-		mockExternal.On("GetExchangeCurrency", fakeCurrencyStr, beerTest.Currency, beerTest.Price).
+		mockExternal.On("GetExchangeCurrency", fakeCurrencyStr, beerTest.Currency, beerTest.Price*float64(fakeQuantityInt)).
 			Return(dataCurrencyResponse(), nil)
 
 		gotPrice, errService := service.GetOneBoxPrice(ctx, fakeBeerIdUint, fakeCurrencyStr, fakeQuantityInt)
@@ -235,7 +237,7 @@ func Test_beerService_GetOneBoxPrice(t *testing.T) {
 
 		wantErr := assert.AnError
 		mockRepository.On("GetBeerById", ctx, fakeBeerIdUint).Return(beerTest, nil)
-		mockExternal.On("GetExchangeCurrency", fakeCurrencyStr, beerTest.Currency, beerTest.Price).
+		mockExternal.On("GetExchangeCurrency", fakeCurrencyStr, beerTest.Currency, beerTest.Price*float64(fakeQuantityInt)).
 			Return(externalModel.CurrencyConversionResponse{}, wantErr)
 
 		gotPrice, errService := service.GetOneBoxPrice(ctx, fakeBeerIdUint, fakeCurrencyStr, fakeQuantityInt)

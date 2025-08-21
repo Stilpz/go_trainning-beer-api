@@ -49,10 +49,8 @@ func newTestClient(fn RoundTripFunc) *http.Client { return &http.Client{Transpor
 func sampleSuccessBody() []byte {
 	resp := externalModel.CurrencyConversionResponse{
 		Success: true,
-		Terms:   "https://currencylayer.com/terms",
-		Privacy: "https://currencylayer.com/privacy",
-		Query:   fmt.Sprintf("%s,%s,%.2f", fakeCurrencyFromStr, fakeCurrencyToStr, fakeAmountFloat),
-		Info:    fmt.Sprintf(`{"timestamp":%d,"quote":%f}`, fakeTimeUnix, fakeQuoteFloat),
+		Query:   externalModel.CurrencyQuery{From: fakeCurrencyFromStr, To: fakeCurrencyToStr, Amount: fakeAmountFloat},
+		Info:    externalModel.InfoResponse{Timestamp: fakeTimeUnix},
 		Result:  fakeResultFloat,
 	}
 	b, _ := json.Marshal(resp)
@@ -93,17 +91,8 @@ func Test_clientExchanGerate_GetExchangeCurrency(t *testing.T) {
 		gotExchange, errExchangeCurrency := api.GetExchangeCurrency(fakeCurrencyFromStr, fakeCurrencyToStr, fakeAmountFloat)
 
 		assert.NoError(t, errExchangeCurrency)
-
-		// Unmarshal Info field to extract Quote and Timestamp
-		var info struct {
-			Timestamp int64   `json:"timestamp"`
-			Quote     float64 `json:"quote"`
-		}
-		err := json.Unmarshal([]byte(gotExchange.Info), &info)
-		assert.NoError(t, err)
-		assert.Equal(t, fakeQuoteFloat, info.Quote)
 		assert.Equal(t, fakeResultFloat, gotExchange.Result)
-		assert.Equal(t, fakeTimeUnix, info.Timestamp)
+		assert.Equal(t, fakeTimeUnix, gotExchange.Info.Timestamp)
 	})
 
 	t.Run("HTTP request error", func(t *testing.T) {
