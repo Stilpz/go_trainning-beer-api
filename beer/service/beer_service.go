@@ -151,17 +151,18 @@ func (b *beerService) GetOneBoxPrice(
 		return model.PriceResponse{}, err
 	}
 
-	// 2. Obtener tasa de conversión
-	exchange, err := b.clientCurrencyLayer.GetExchangeCurrency(currencyPay, beer.Currency, beer.Price)
+	// 2. Calcular el total base en la moneda original
+	baseTotal := beer.Price * float64(quantity)
+
+	// 3. Obtener conversión usando el modelo corregido (el método debe usar el modelo adecuado)
+	exchange, err := b.clientCurrencyLayer.GetExchangeCurrency(currencyPay, beer.Currency, baseTotal)
 	if err != nil {
 		subLogger.Error().Msgf("error GetExchangeCurrency: %v", err)
 		return model.PriceResponse{}, err
 	}
 
-	// 3. Calcular y redondear total
-	valueTotal := beer.Price * float64(quantity)
-	total := exchange.Result * valueTotal
-	rounded := math.Round(total*100) / 100
+	// 4. Usar el campo Result de la respuesta de conversión
+	rounded := math.Round(exchange.Result*100) / 100
 
 	subLogger.Info().Msgf("END_OK | beer_id=%v, currency_pay=%v, quantity=%v", ID, currencyPay, quantity)
 	return model.PriceResponse{PriceTotal: rounded, CurrencyPay: currencyPay}, nil
